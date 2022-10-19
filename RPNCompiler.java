@@ -10,34 +10,12 @@ class RPNCompiler
         ArrayList<Token> tokenList = new ArrayList<Token>();
         Stack<Integer> postFixStack = new Stack<Integer>();
         StringBuilder sb = new StringBuilder();
+        Regex regex = new Regex();
 
         try (BufferedReader br = Files.newBufferedReader(Paths.get(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                Token token;
-                switch(line) {
-                    case "*":
-                        token = new Token(TokenType.STAR, "*");
-                        break;
-                    case "/":
-                        token = new Token(TokenType.SLASH, "/");
-                        break;
-                    case "+":
-                        token = new Token(TokenType.PLUS, "+");
-                        break;
-                    case "-":
-                        token = new Token(TokenType.MINUS, "-");
-                        break;
-                    default:
-                        try {
-                            Integer.parseInt(line);
-                            token = new Token(TokenType.NUM, line);
-                        }
-                        catch (NumberFormatException e) {
-                            throw new Error("Unexpected character: " + line);
-                        }
-                }
-                
+                Token token = regex.getToken(line);
                 tokenList.add(token);
                 if (scanMode) {
                     System.out.println(token);
