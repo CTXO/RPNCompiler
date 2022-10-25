@@ -42,16 +42,16 @@ public class Interpreter implements Expr.Visitor<Integer> {
 
 		switch (expr.operator.type) {
 		case PLUS:
-			result = left + right;
+			result = right + left;
 			break;
 		case MINUS:
-			result = left - right;
+			result = right - left;
 			break;
 		case SLASH:
-			result = left / right;
+			result = right / left;
 			break;
 		case STAR:
-			result = left * right;
+			result = right * left;
 			break;
 		default:
 			break;
