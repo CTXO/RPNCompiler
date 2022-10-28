@@ -22,7 +22,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import postfix.ast.AstPrinter;
 import postfix.ast.Expr;
@@ -38,7 +40,7 @@ import postfix.parser.ParserError;
  */
 public class Postfix {
 
-	private static final Interpreter interpreter = new Interpreter();
+	private static Interpreter interpreter;
 	private static boolean hasError = false;
 	private static boolean debugging = false;
 
@@ -50,7 +52,7 @@ public class Postfix {
 	 */
 	public static void main(String[] args) throws IOException {
 //		args = new String [1];
-//		args [0] = "../StackerPrograms/program/Calc1.stk";
+//		args [0] = "../StackerPrograms/program/Calc2.stk";
 //		args [1] = "../StackerPrograms/program/Calc2.stk";
 
 		debugging = false; // for interpretation phases
@@ -101,6 +103,13 @@ public class Postfix {
 		try {
 			Scanner scanner = new Scanner(source);
 			List<Token> tokens = scanner.scan();
+			HashMap<String, Integer> finalVariables = new HashMap<String, Integer>();
+			interpreter = new Interpreter(finalVariables);
+			finalVariables.put("a", 5);
+			finalVariables.put("b", 3);
+			finalVariables.put("c", 10);
+			finalVariables.put("g", 8);
+
 
 			// debugging for tokens
 			if(debugging) {
@@ -123,6 +132,10 @@ public class Postfix {
 			error("Parser", e.getMessage());
 			hasError = true;
 		}	
+		catch (NoSuchElementException e) {
+			error("Semantic", e.getMessage());
+			hasError = true;
+		}
 	}
 
 	// -------------------------------------------------------------

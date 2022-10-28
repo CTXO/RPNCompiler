@@ -25,7 +25,7 @@ public enum TokenType {
 	NUM,
 
 	// Single-character tokens for operations.
-	MINUS, PLUS, SLASH, STAR,
+	MINUS, PLUS, SLASH, STAR, ID,
 	
 	EOF
 

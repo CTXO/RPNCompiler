@@ -51,7 +51,7 @@ public class Parser {
 	// -------------------------------------------------------------
 	private Expr expression() {
 		while (!isAtEnd()) {
-			if(this.match(TokenType.NUM)) {
+			if(this.match(TokenType.NUM) || this.match(TokenType.ID)) {
 				this.stack.push(this.number());
 			}
 			// matching any of the operation tokens

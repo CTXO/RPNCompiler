@@ -17,25 +17,52 @@
 package postfix.interpreter;
 
 import postfix.ast.Expr;
+import java.util.*;
 
 /**
  * @author Henrique Rebelo
  */
 public class Interpreter implements Expr.Visitor<Integer> {
-
+	HashMap<String, Integer> variables;
+	public Interpreter(HashMap<String, Integer> variables) {
+		this.variables = variables;
+	}
 	public int interp(Expr expression) { 
-		int value = evaluate(expression);
-		
+		int value = evaluate(expression);	
 		return value;
 	}
 
 	@Override
 	public Integer visitNumberExpr(Expr.Number expr) {
-		return Integer.parseInt(expr.value);
+		Boolean isNum;
+		int result;
+		try {
+			isNum = true;
+			result = Integer.parseInt(expr.value);
+		}
+		catch(NumberFormatException e) {
+			isNum = false;
+			result = 0;
+		}
+
+		if (!isNum) {
+			try {
+				result = this.variables.get(expr.value);
+			}
+			catch(NullPointerException error) {
+				throw new NoSuchElementException("Variable " + expr.value + " is not defined");
+			}
+
+		}
+
+		return result;
+		
+		
 	}
 
 	@Override
 	public Integer visitBinopExpr(Expr.Binop expr) {
+
 		int left = evaluate(expr.left);
 		int right = evaluate(expr.right); 
 		int result = 0;
@@ -52,7 +79,7 @@ public class Interpreter implements Expr.Visitor<Integer> {
 			break;
 		case STAR:
 			result = right * left;
-			break;
+			break;			
 		default:
 			break;
 		}
